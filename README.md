@@ -44,7 +44,7 @@ You are of course welcome to replace or change any part of the scaffolded code, 
 
 ## Development
 
-Server - restore the nuget packages, run the solution in visual studio. You can download Visual Studio Community for free.
+Server - `dotnet restore` - to restore nuget packages, `dotnet build` - to build the solution, `cd Timelogger.Api && dotnet run` - starts a server on http://localhost:3001. You can download Visual Studio Code. The project was tested on MacOS High Sierra and Windows 10.
 
 The server solution contains an an API only with a basic Entity Framework in memory context that acts as a database.
 
