@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Timelogger.Entities;
+using Timelogger.Models.Interfaces;
+using Timelogger.Models;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Newtonsoft.Json;
+using System.Buffers;
 
 namespace Timelogger.Api
 {
@@ -36,7 +43,17 @@ namespace Timelogger.Api
 				services.AddCors();
 			}
 			
-			services.AddMvc();
+			services.AddScoped<IProjectRepository, ProjectRepository>();
+			services.AddScoped<ITimeLogRepository, TimeLogRepository>();
+
+			services.AddMvc(options => 
+			{
+				options.OutputFormatters.Clear();
+            	options.OutputFormatters.Add(new JsonOutputFormatter(new JsonSerializerSettings()
+            	{
+                	ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            	}, ArrayPool<char>.Shared));
+			});
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,8 +85,28 @@ namespace Timelogger.Api
 				Id = 1,
 				Name = "e-conomic Interview"
 			};
+			var testProject2 = new Project
+			{
+				Id = 2,
+				Name = "Secret project"
+			};
 
 			context.Projects.Add(testProject1);
+			context.Projects.Add(testProject2);
+
+			var testTimeLog1 = new TimeLog {
+				TimeSpent = 2.5,
+				Date = DateTime.Now,
+				ProjectId = testProject1.Id
+			};
+			var testTimeLog2 = new TimeLog {
+				TimeSpent = 5.23,
+				Date = DateTime.Now,
+				ProjectId = testProject1.Id
+			};
+
+			context.TimeLogs.Add(testTimeLog1);
+			context.TimeLogs.Add(testTimeLog2);
 
 			context.SaveChanges();
 		}

@@ -1,25 +1,27 @@
-import React from 'react';
-import Projects from './views/Projects';
-import './style.css';
+import React from 'react'
+import Projects from './views/Projects'
+import Test from './views/Test'
+import TopNav from './components/top-nav'
+import { BrowserRouter, Switch, Route } from "react-router-dom"
+import './style.css'
 
 class App extends React.Component {
     render() {
         return (
-            <React.Fragment>
-                <header>
-                    <nav className="navbar navbar-expand navbar-dark fixed-top bg-dark">
+            <BrowserRouter>
+                <React.Fragment>
+                    <TopNav />
+                    
+                    <main>
                         <div className="container">
-                            <a className="navbar-brand" href="/">Timelogger</a>
+                            <Switch>
+                                <Route exact path='/' component={Projects}/>
+                                <Route exact path='/test' component={Test}/>
+                            </Switch>
                         </div>
-                    </nav>
-                </header>
-                
-                <main>
-                    <div className="container">                      
-                        <Projects />
-                    </div>
-                </main>
-            </React.Fragment>
+                    </main>
+                </React.Fragment>
+            </BrowserRouter>
         );
     }
 }

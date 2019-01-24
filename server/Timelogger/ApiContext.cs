@@ -5,11 +5,13 @@ namespace Timelogger
 {
 	public class ApiContext : DbContext
 	{
+		public ApiContext() {}
 		public ApiContext(DbContextOptions<ApiContext> options)
 			: base(options)
 		{
 		}
 
 		public DbSet<Project> Projects { get; set; }
+		public DbSet<TimeLog> TimeLogs { get; set; }
 	}
 }
